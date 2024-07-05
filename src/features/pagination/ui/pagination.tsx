@@ -1,12 +1,7 @@
 import { memo } from 'react';
-import { PaginationItem } from '@/entities/pagination';
 
 function Pagination() {
-  return (
-    <div>
-      <PaginationItem />
-    </div>
-  );
+  return <div>Pagination</div>;
 }
 
 export default memo(Pagination);

@@ -10,7 +10,7 @@ function PageLayout({ header, children }: IPageLayoutProps) {
     <section className="pt-12">
       <div className="mb-6 flex flex-col gap-y-[15px] items-center">{header}</div>
 
-      <div>{children}</div>
+      <div className="pb-6">{children}</div>
     </section>
   );
 }

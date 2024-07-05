@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { Title, PageLayout } from '@/shared/page-layout';
+import { Title, PageLayout } from '@/shared/ui/page-layout';
 
 function CreatePage() {
   const renders = {
