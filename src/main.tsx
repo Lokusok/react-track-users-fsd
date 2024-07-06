@@ -6,4 +6,8 @@ import App from './app';
 const rootElement = document.getElementById('root') as HTMLElement;
 const root = ReactDOM.createRoot(rootElement);
 
-root.render(<App />);
+import('@/mocks/browser').then((module) => {
+  module.worker.start().then(() => {
+    root.render(<App />);
+  });
+});
