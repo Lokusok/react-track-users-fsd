@@ -1,7 +1,7 @@
 import { memo } from 'react';
 
 import { Title, PageLayout } from '@/shared/ui/page-layout';
-import { CreateUserForm } from '@/features/create-user-form';
+import { CreateUserForm } from '@/entities/user-form';
 
 function CreatePage() {
   const renders = {

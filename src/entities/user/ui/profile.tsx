@@ -7,11 +7,13 @@ interface IProfileProps {
 
 function Profile({ children, actions }: IProfileProps) {
   return (
-    <>
-      <p className="text-[18px] text-center">{children}</p>
+    <div>
+      {children}
 
-      {Boolean(actions) && <div className="mt-[30px]">{actions}</div>}
-    </>
+      {Boolean(actions) && (
+        <div className="mt-[30px] flex gap-x-[15px] justify-center items-center">{actions}</div>
+      )}
+    </div>
   );
 }
 
