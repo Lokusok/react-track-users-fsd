@@ -1,19 +1,20 @@
 import { memo } from 'react';
 
-import { Search, Title, PageLayout } from '@/shared/ui/page-layout';
+import { Title, PageLayout } from '@/shared/ui/page-layout';
 import { Container } from '@/shared/ui/container';
 import { Grid } from '@/shared/ui/grid';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { UserCard } from '@/entities/user';
 import { Button } from '@/shared/ui/button';
 import { Pagination } from '@/features/pagination';
+import { SearchBy } from '@/features/search';
 
 function MainPage() {
   const renders = {
     header: () => (
       <>
         <Title>Главная. Список всех пользователей</Title>
-        <Search />
+        <SearchBy />
       </>
     ),
 
