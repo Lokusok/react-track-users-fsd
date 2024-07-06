@@ -5,7 +5,7 @@ interface IGridProps {
 }
 
 function Grid({ children }: IGridProps) {
-  return <div className="grid grid-cols-2 gap-[30px] auto-rows-[200px] ">{children}</div>;
+  return <div className="grid grid-cols-2 gap-[30px] auto-rows-[200px] w-[100%]">{children}</div>;
 }
 
 export default memo(Grid);

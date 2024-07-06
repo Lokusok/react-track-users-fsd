@@ -1,15 +1,35 @@
-import { memo } from 'react';
+import style from './style.module.css';
+
+import { memo, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { SwitchTransition, CSSTransition } from 'react-transition-group';
+
+import {
+  Pagination,
+  paginationActions,
+  selectCurrentPage,
+  selectMaxPage,
+} from '@/features/pagination';
+import { SearchBy, selectSearchQuery } from '@/features/search';
+
+import { fetchUsers, selectUsers, selectUsersWaiting, UserCard } from '@/entities/user';
 
 import { Title, PageLayout } from '@/shared/ui/page-layout';
 import { Container } from '@/shared/ui/container';
 import { Grid } from '@/shared/ui/grid';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { UserCard } from '@/entities/user';
 import { Button } from '@/shared/ui/button';
-import { Pagination } from '@/features/pagination';
-import { SearchBy } from '@/features/search';
+import { useAppDispatch } from '@/shared/lib/hooks';
 
 function MainPage() {
+  const dispatch = useAppDispatch();
+
+  const users = useSelector(selectUsers);
+  const currentPage = useSelector(selectCurrentPage);
+  const maxPage = useSelector(selectMaxPage);
+  const searchQuery = useSelector(selectSearchQuery);
+  const isUsersWaiting = useSelector(selectUsersWaiting);
+
   const renders = {
     header: () => (
       <>
@@ -18,28 +38,67 @@ function MainPage() {
       </>
     ),
 
-    linkToUser: () => (
-      <Button link to={'/user/fsdfsd'}>
+    linkToUser: (user: IUser) => (
+      <Button link to={`/user/${user.id}`}>
         Просмотреть
       </Button>
     ),
   };
 
+  const options = {
+    isPaginationVisible: !isUsersWaiting && maxPage !== 1,
+  };
+
+  useEffect(() => {
+    const asyncEffect = async () => {
+      const thunkResult = await dispatch(
+        fetchUsers({
+          page: currentPage,
+          searchQuery,
+        }),
+      ).unwrap();
+
+      dispatch(paginationActions.setMaxPage(thunkResult.maxPage));
+      dispatch(paginationActions.setPerPage(thunkResult.perPage));
+    };
+
+    asyncEffect();
+  }, [dispatch, currentPage, searchQuery]);
+
   return (
     <PageLayout header={renders.header()}>
-      <Container className="flex flex-col gap-y-[30px] items-center">
-        <Grid>
-          {/* <Skeleton />
-          <Skeleton />
-          <Skeleton />
-          <Skeleton /> */}
-          <UserCard actions={renders.linkToUser()} />
-          <UserCard actions={renders.linkToUser()} />
-          <UserCard actions={renders.linkToUser()} />
-          <UserCard actions={renders.linkToUser()} />
-        </Grid>
+      <Container>
+        <SwitchTransition mode="out-in">
+          <CSSTransition
+            key={currentPage}
+            classNames={{
+              enter: style['grid-wrapper-enter'],
+              enterActive: style['grid-wrapper-enter-active'],
+              exit: style['grid-wrapper-exit'],
+              exitActive: style['grid-wrapper-exit-active'],
+            }}
+            timeout={300}
+          >
+            {!isUsersWaiting && users.length > 0 ? (
+              <div className="flex flex-col gap-y-[30px] items-center">
+                <Grid>
+                  {users.length > 0 &&
+                    users.map((user) => (
+                      <UserCard key={user.id} actions={renders.linkToUser(user)} user={user} />
+                    ))}
+                </Grid>
 
-        <Pagination />
+                {options.isPaginationVisible && <Pagination />}
+              </div>
+            ) : (
+              <Grid>
+                {new Array(4).fill(null).map((_, index) => (
+                  <Skeleton key={index} />
+                ))}
+              </Grid>
+            )}
+          </CSSTransition>
+        </SwitchTransition>
       </Container>
     </PageLayout>
   );

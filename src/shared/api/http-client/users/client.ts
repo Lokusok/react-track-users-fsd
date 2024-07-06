@@ -1,11 +1,14 @@
 import axios from 'axios';
-import { IPaginationResponse, ISearchByOptions } from './types';
+import { IPaginationResponse, ISearchByOptions } from '../types';
+import { BASE_API_URL } from '../config';
+
+const BASE_API_URL_USERS = `${BASE_API_URL}/users`;
 
 const apiInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: BASE_API_URL_USERS,
 });
 
-const httpClient = () => ({
+const httpUsersClient = {
   searchBy: async (options: ISearchByOptions) => {
     const response = await apiInstance.get<IPaginationResponse<IUser>>('', {
       params: {
@@ -29,6 +32,6 @@ const httpClient = () => ({
     const response = await apiInstance.put<IUser>(`/${user.id}`, user);
     return response.data;
   },
-});
+};
 
-export default httpClient;
+export default httpUsersClient;

@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { searchReducer } from '@/features/search';
 import { paginationReducer } from '@/features/pagination';
-import { usersReducer } from '@/entities/user';
+import { fetchUsers, usersReducer } from '@/entities/user';
 
 const store = configureStore({
   reducer: {
@@ -11,5 +11,8 @@ const store = configureStore({
     users: usersReducer,
   },
 });
+
+// Prefetch
+store.dispatch(fetchUsers({ page: 1, searchQuery: '' }));
 
 export default store;

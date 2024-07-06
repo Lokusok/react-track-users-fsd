@@ -36,12 +36,10 @@ function UserProfile({ mode, setMode }: IUserProfileProps) {
         classNames={{
           enter: style['profile-inner-enter'],
           enterActive: style['profile-inner-enter-active'],
-          enterDone: style['profile-inner-enter-done'],
           exit: style['profile-inner-exit'],
           exitActive: style['profile-inner-exit-active'],
-          exitDone: style['profile-inner-exit-done'],
         }}
-        timeout={500}
+        timeout={400}
       >
         {mode === 'view' ? (
           <Profile actions={renders.actionsView()}>

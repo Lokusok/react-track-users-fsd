@@ -14,7 +14,7 @@ const paginationSlice = createSlice({
     setCurrentPage: (state, action: PayloadAction<IPaginationState['currentPage']>) => {
       state.currentPage = action.payload;
     },
-    setMaxPaage: (state, action: PayloadAction<IPaginationState['maxPage']>) => {
+    setMaxPage: (state, action: PayloadAction<IPaginationState['maxPage']>) => {
       state.maxPage = action.payload;
     },
     setPerPage: (state, action: PayloadAction<IPaginationState['perPage']>) => {

@@ -1,0 +1,17 @@
+.grid-wrapper-enter {
+  opacity: 0;
+}
+
+.grid-wrapper-enter-active {
+  opacity: 1;
+  transition: opacity ease 0.3s;
+}
+
+.grid-wrapper-exit {
+  opacity: 1;
+}
+
+.grid-wrapper-exit-active {
+  opacity: 0;
+  transition: opacity ease 0.3s;
+}
