@@ -1,29 +1,74 @@
-import { memo } from 'react';
+import React, { forwardRef, memo, useImperativeHandle } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import Label from './label';
 
-function UserForm() {
+interface IUserFormProps {
+  onSubmit: (data: TFormValues) => void;
+  disabled?: boolean;
+}
+
+const schema = z.object({
+  name: z.string().min(1, { message: 'Необходимо указать имя пользователя!' }),
+  descr: z.string().min(10, { message: 'Минимум - 10 символов.' }),
+});
+
+type TFormValues = z.infer<typeof schema>;
+
+function UserForm(
+  { onSubmit, disabled = false }: IUserFormProps,
+  ref: React.ForwardedRef<{ resetAllFields: () => void }>,
+) {
+  const { register, handleSubmit, formState, reset } = useForm<TFormValues>({
+    resolver: zodResolver(schema),
+    mode: 'onTouched',
+  });
+
+  const callbacks = {
+    onSubmit: (data: TFormValues) => {
+      onSubmit(data);
+    },
+    resetAllFields: () => {
+      reset();
+    },
+  };
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      resetAllFields: callbacks.resetAllFields,
+    }),
+    [callbacks.resetAllFields],
+  );
+
   return (
-    <form className="max-w-[540px] flex flex-col gap-y-[15px] mx-auto">
+    <form
+      onSubmit={handleSubmit(callbacks.onSubmit)}
+      className="max-w-[540px] flex flex-col gap-y-[15px] mx-auto"
+    >
       <div>
         <Label title="Имя пользователя:">
-          <Input />
+          <Input {...register('name')} disabled={disabled} />
+          <span>{formState.errors?.name?.message}</span>
         </Label>
       </div>
 
       <div>
         <Label title="Описание:">
-          <Input textarea />
+          <Input {...register('descr')} disabled={disabled} textarea />
+          <span>{formState.errors?.descr?.message}</span>
         </Label>
       </div>
 
       <div className="flex justify-end">
-        <Button>Создать</Button>
+        <Button disabled={!formState.isValid || disabled}>Создать</Button>
       </div>
     </form>
   );
 }
 
-export default memo(UserForm);
+export default memo(forwardRef(UserForm));

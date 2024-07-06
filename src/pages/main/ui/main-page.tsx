@@ -20,6 +20,7 @@ import { Grid } from '@/shared/ui/grid';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Button } from '@/shared/ui/button';
 import { useAppDispatch } from '@/shared/lib/hooks';
+import { NoUsersNotifier } from '@/shared/ui/no-users-notifier';
 
 function MainPage() {
   const dispatch = useAppDispatch();
@@ -60,6 +61,7 @@ function MainPage() {
 
       dispatch(paginationActions.setMaxPage(thunkResult.maxPage));
       dispatch(paginationActions.setPerPage(thunkResult.perPage));
+      dispatch(paginationActions.setCurrentPage(thunkResult.page));
     };
 
     asyncEffect();
@@ -79,24 +81,32 @@ function MainPage() {
             }}
             timeout={300}
           >
-            {!isUsersWaiting && users.length > 0 ? (
-              <div className="flex flex-col gap-y-[30px] items-center">
-                <Grid>
-                  {users.length > 0 &&
-                    users.map((user) => (
-                      <UserCard key={user.id} actions={renders.linkToUser(user)} user={user} />
-                    ))}
-                </Grid>
+            <>
+              {!isUsersWaiting && users.length > 0 ? (
+                <div className="flex flex-col gap-y-[30px] items-center">
+                  <Grid>
+                    {users.length > 0 &&
+                      users.map((user) => (
+                        <UserCard key={user.id} actions={renders.linkToUser(user)} user={user} />
+                      ))}
+                  </Grid>
 
-                {options.isPaginationVisible && <Pagination />}
-              </div>
-            ) : (
-              <Grid>
-                {new Array(4).fill(null).map((_, index) => (
-                  <Skeleton key={index} />
-                ))}
-              </Grid>
-            )}
+                  {options.isPaginationVisible && <Pagination />}
+                </div>
+              ) : (
+                <>
+                  {isUsersWaiting && (
+                    <Grid>
+                      {new Array(4).fill(null).map((_, index) => (
+                        <Skeleton key={index} />
+                      ))}
+                    </Grid>
+                  )}
+                </>
+              )}
+
+              {!isUsersWaiting && users.length === 0 && <NoUsersNotifier />}
+            </>
           </CSSTransition>
         </SwitchTransition>
       </Container>

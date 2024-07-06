@@ -8,5 +8,14 @@ export {
   selectUsersCount,
   selectUsersWaiting,
   selectUserById,
+  selectIsCreating,
+  selectIsDeleting,
 } from './model/store/selectors';
-export { fetchUsers } from './model/store/thunks';
+export { fetchUsers, createUser, deleteUser } from './model/store/thunks';
+
+export { currentUserReducer, currentUserActions } from './model/store/current-user/slice';
+export {
+  selectCurrentUserInfo,
+  selectCurrentUserWaiting,
+} from './model/store/current-user/selectors';
+export { fetchUserById } from './model/store/current-user/thunks';

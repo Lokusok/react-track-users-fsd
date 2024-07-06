@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 interface CommonProps {
   children?: React.ReactNode;
+  disabled?: boolean;
 }
 
 type ConditionalProps =
@@ -19,9 +20,9 @@ type ConditionalProps =
 
 type TProps = CommonProps & ConditionalProps;
 
-function Button({ link, children, to, onClick }: TProps) {
+function Button({ link, children, to, onClick, disabled = false }: TProps) {
   const className =
-    'bg-accent-color-1 py-[10px] px-[25px] text-white rounded-[4px] no-underline pointer border-none hover:opacity-70 active:opacity-40 cursor-pointer';
+    'bg-accent-color-1 py-[10px] px-[25px] text-white rounded-[4px] no-underline pointer border-none hover:opacity-70 active:opacity-40 cursor-pointer disabled:pointer-events-none disabled:opacity-50';
 
   if (link) {
     return (
@@ -32,7 +33,7 @@ function Button({ link, children, to, onClick }: TProps) {
   }
 
   return (
-    <button onClick={onClick} className={className}>
+    <button onClick={onClick} className={className} disabled={disabled}>
       {children}
     </button>
   );

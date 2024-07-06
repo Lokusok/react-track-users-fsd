@@ -19,6 +19,10 @@ const httpUsersClient = {
     console.log('searchBy:', response);
     return response.data;
   },
+  fetchUserById: async (userId: IUser['id']) => {
+    const response = await apiInstance.get<IUser>(userId);
+    return response.data;
+  },
   createUser: async (user: Omit<IUser, 'id'>) => {
     const response = await apiInstance.post<IUser>('', user);
     console.log('createUser:', response);

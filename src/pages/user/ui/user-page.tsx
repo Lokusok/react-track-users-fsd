@@ -1,19 +1,27 @@
 import style from './style.module.css';
 
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 import { PageLayout, Title } from '@/shared/ui/page-layout';
 import { UserProfile } from '@/features/user-profile';
-import { useSelector } from 'react-redux';
-import { selectUserById } from '@/entities/user';
+import { fetchUserById, selectCurrentUserInfo, selectCurrentUserWaiting } from '@/entities/user';
+import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 
 function UserPage() {
   const { id } = useParams();
 
-  const user = useSelector((state) => selectUserById(state, id))!;
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(selectCurrentUserInfo);
+  const isUserWaiting = useAppSelector(selectCurrentUserWaiting);
+
   const [mode, setMode] = useState<'view' | 'edit'>('view');
+
+  useEffect(() => {
+    if (!id) return;
+    dispatch(fetchUserById(id));
+  }, [id, dispatch]);
 
   const renders = {
     header: () => (
@@ -30,13 +38,23 @@ function UserPage() {
             timeout={400}
           >
             <Title>
-              {mode === 'view' ? (
-                <>
-                  Просмотр пользователя <u>{user.name}</u>
-                </>
+              {isUserWaiting ? (
+                <>Загружаем профиль пользователя...</>
               ) : (
+                !user && <>Пользователь не найден...</>
+              )}
+
+              {user && (
                 <>
-                  Редактирование пользователя <u>{user.name}</u>
+                  {mode === 'view' ? (
+                    <>
+                      Просмотр пользователя <u>{user.name}</u>
+                    </>
+                  ) : (
+                    <>
+                      Редактирование пользователя <u>{user.name}</u>
+                    </>
+                  )}
                 </>
               )}
             </Title>
@@ -48,7 +66,7 @@ function UserPage() {
 
   return (
     <PageLayout header={renders.header()}>
-      <UserProfile mode={mode} setMode={setMode}></UserProfile>
+      {user && <UserProfile mode={mode} setMode={setMode} user={user}></UserProfile>}
     </PageLayout>
   );
 }

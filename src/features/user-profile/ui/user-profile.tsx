@@ -3,27 +3,45 @@ import style from './style.module.css';
 import { memo } from 'react';
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
 
-import { Profile, ProfileDescr } from '@/entities/user';
-import { Button } from '@/shared/ui/button';
+import { deleteUser, Profile, ProfileDescr, selectIsDeleting } from '@/entities/user';
 import { UpdateUserForm } from '@/entities/user-form';
+
+import { Button } from '@/shared/ui/button';
+import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface IUserProfileProps {
   mode: 'view' | 'edit';
   setMode: (data: IUserProfileProps['mode']) => void;
+  user: IUser;
 }
 
-function UserProfile({ mode, setMode }: IUserProfileProps) {
+function UserProfile({ mode, setMode, user }: IUserProfileProps) {
+  const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
+
+  const isDeleting = useAppSelector(selectIsDeleting);
+
   const callbacks = {
     toggleMode: () => {
       setMode(mode === 'view' ? 'edit' : 'view');
+    },
+    deleteUser: async () => {
+      await dispatch(deleteUser(user.id)).unwrap();
+      navigate('/', { state: { fetchUsers: true } });
     },
   };
 
   const renders = {
     actionsView: () => (
       <>
-        <Button>Удалить</Button>
-        <Button onClick={callbacks.toggleMode}>Изменить</Button>
+        <Button disabled={isDeleting} onClick={callbacks.deleteUser}>
+          Удалить
+        </Button>
+        <Button disabled={isDeleting} onClick={callbacks.toggleMode}>
+          Изменить
+        </Button>
       </>
     ),
     actionsEdit: () => <Button onClick={callbacks.toggleMode}>К просмотру</Button>,
@@ -43,9 +61,7 @@ function UserProfile({ mode, setMode }: IUserProfileProps) {
       >
         {mode === 'view' ? (
           <Profile actions={renders.actionsView()}>
-            <ProfileDescr>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aperiam, adipisci.
-            </ProfileDescr>
+            <ProfileDescr>{user.descr}</ProfileDescr>
           </Profile>
         ) : (
           <Profile actions={renders.actionsEdit()}>
