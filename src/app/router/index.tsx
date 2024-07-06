@@ -4,6 +4,7 @@ import Layout from '../layout';
 
 import { CreatePage } from '@/pages/create';
 import { MainPage } from '@/pages/main';
+import { UserPage } from '@/pages/user';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path: '/create',
         element: <CreatePage />,
+      },
+      {
+        path: '/user/:id',
+        element: <UserPage />,
       },
     ],
   },
