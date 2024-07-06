@@ -17,5 +17,6 @@ export { currentUserReducer, currentUserActions } from './model/store/current-us
 export {
   selectCurrentUserInfo,
   selectCurrentUserWaiting,
+  selectCurrentUserIsUpdating,
 } from './model/store/current-user/selectors';
-export { fetchUserById } from './model/store/current-user/thunks';
+export { fetchUserById, updateUserById } from './model/store/current-user/thunks';

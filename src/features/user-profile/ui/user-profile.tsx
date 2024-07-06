@@ -3,7 +3,14 @@ import style from './style.module.css';
 import { memo } from 'react';
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
 
-import { deleteUser, Profile, ProfileDescr, selectIsDeleting } from '@/entities/user';
+import {
+  deleteUser,
+  Profile,
+  ProfileDescr,
+  selectCurrentUserIsUpdating,
+  selectIsDeleting,
+  updateUserById,
+} from '@/entities/user';
 import { UpdateUserForm } from '@/entities/user-form';
 
 import { Button } from '@/shared/ui/button';
@@ -22,6 +29,7 @@ function UserProfile({ mode, setMode, user }: IUserProfileProps) {
   const navigate = useNavigate();
 
   const isDeleting = useAppSelector(selectIsDeleting);
+  const isUpdating = useAppSelector(selectCurrentUserIsUpdating);
 
   const callbacks = {
     toggleMode: () => {
@@ -30,6 +38,15 @@ function UserProfile({ mode, setMode, user }: IUserProfileProps) {
     deleteUser: async () => {
       await dispatch(deleteUser(user.id)).unwrap();
       navigate('/', { state: { fetchUsers: true } });
+    },
+    updateUser: async (data: Omit<IUser, 'id'>) => {
+      await dispatch(
+        updateUserById({
+          id: user.id,
+          info: data,
+        }),
+      );
+      callbacks.toggleMode();
     },
   };
 
@@ -65,7 +82,7 @@ function UserProfile({ mode, setMode, user }: IUserProfileProps) {
           </Profile>
         ) : (
           <Profile actions={renders.actionsEdit()}>
-            <UpdateUserForm />
+            <UpdateUserForm onSubmit={callbacks.updateUser} user={user} disabled={isUpdating} />
           </Profile>
         )}
       </CSSTransition>

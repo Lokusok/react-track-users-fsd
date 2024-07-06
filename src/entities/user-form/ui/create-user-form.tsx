@@ -7,7 +7,7 @@ import { Input } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import Label from './label';
 
-interface IUserFormProps {
+interface ICreateUserFormProps {
   onSubmit: (data: TFormValues) => void;
   disabled?: boolean;
 }
@@ -19,8 +19,8 @@ const schema = z.object({
 
 type TFormValues = z.infer<typeof schema>;
 
-function UserForm(
-  { onSubmit, disabled = false }: IUserFormProps,
+function CreateUserForm(
+  { onSubmit, disabled = false }: ICreateUserFormProps,
   ref: React.ForwardedRef<{ resetAllFields: () => void }>,
 ) {
   const { register, handleSubmit, formState, reset } = useForm<TFormValues>({
@@ -35,6 +35,10 @@ function UserForm(
     resetAllFields: () => {
       reset();
     },
+  };
+
+  const options = {
+    isSubmitBtnDisabled: !formState.isValid || disabled,
   };
 
   useImperativeHandle(
@@ -65,10 +69,10 @@ function UserForm(
       </div>
 
       <div className="flex justify-end">
-        <Button disabled={!formState.isValid || disabled}>Создать</Button>
+        <Button disabled={options.isSubmitBtnDisabled}>Создать</Button>
       </div>
     </form>
   );
 }
 
-export default memo(forwardRef(UserForm));
+export default memo(forwardRef(CreateUserForm));
