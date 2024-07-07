@@ -10,7 +10,6 @@ export const selectUserById = createSelector(
   selectUsers,
   (_, id) => id,
   (users: IUser[], id: unknown) => {
-    console.log('SELECT USER BY ID', id, users);
     return users.find((user) => user.id === id);
   },
 );

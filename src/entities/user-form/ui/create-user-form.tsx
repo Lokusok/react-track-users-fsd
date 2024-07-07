@@ -51,25 +51,33 @@ function CreateUserForm(
 
   return (
     <form
+      data-testid="create-user-form"
       onSubmit={handleSubmit(callbacks.onSubmit)}
       className="max-w-[540px] flex flex-col gap-y-[15px] mx-auto"
     >
       <div>
         <Label title="Имя пользователя:">
-          <Input {...register('name')} disabled={disabled} />
+          <Input {...register('name')} disabled={disabled} data-testid="create-input-username" />
           <span>{formState.errors?.name?.message}</span>
         </Label>
       </div>
 
       <div>
         <Label title="Описание:">
-          <Input {...register('descr')} disabled={disabled} textarea />
+          <Input
+            {...register('descr')}
+            disabled={disabled}
+            textarea
+            data-testid="create-textarea-username"
+          />
           <span>{formState.errors?.descr?.message}</span>
         </Label>
       </div>
 
       <div className="flex justify-end">
-        <Button disabled={options.isSubmitBtnDisabled}>Создать</Button>
+        <Button data-testid="create-submit-button" disabled={options.isSubmitBtnDisabled}>
+          Создать
+        </Button>
       </div>
     </form>
   );

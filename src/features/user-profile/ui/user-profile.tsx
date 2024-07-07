@@ -56,7 +56,7 @@ function UserProfile({ mode, setMode, user }: IUserProfileProps) {
         <Button disabled={isDeleting} onClick={callbacks.deleteUser}>
           Удалить
         </Button>
-        <Button disabled={isDeleting} onClick={callbacks.toggleMode}>
+        <Button data-testid="go-edit-button" disabled={isDeleting} onClick={callbacks.toggleMode}>
           Изменить
         </Button>
       </>

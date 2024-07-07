@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { beforeAll, afterEach, afterAll } from 'vitest';
-import { server } from './mocks/node';
+import { server } from './app/mocks/node';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());

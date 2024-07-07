@@ -20,20 +20,20 @@ type ConditionalProps =
 
 type TProps = CommonProps & ConditionalProps;
 
-function Button({ link, children, to, onClick, disabled = false }: TProps) {
+function Button({ link, children, to, onClick, disabled = false, ...props }: TProps) {
   const className =
     'bg-accent-color-1 py-[10px] px-[25px] text-white rounded-[4px] no-underline pointer border-none hover:opacity-70 active:opacity-40 cursor-pointer disabled:pointer-events-none disabled:opacity-50';
 
   if (link) {
     return (
-      <Link className={className} to={to!}>
+      <Link className={className} to={to!} {...props}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button onClick={onClick} className={className} disabled={disabled}>
+    <button onClick={onClick} className={className} disabled={disabled} {...props}>
       {children}
     </button>
   );

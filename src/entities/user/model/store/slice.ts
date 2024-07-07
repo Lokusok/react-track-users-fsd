@@ -20,7 +20,6 @@ const usersSlice = createSlice({
         state.waiting = true;
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
-        console.log('fetchUsers.fulfilled:', action.payload);
         state.users = action.payload.data;
         state.waiting = false;
       })

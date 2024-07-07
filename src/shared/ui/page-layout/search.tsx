@@ -22,9 +22,7 @@ function Search({ value, onChange, onEnterDown }: ISearchProps) {
     const inputNode = inputRef.current;
 
     const keydownListener = (e: KeyboardEvent) => {
-      console.log(e);
       if (e.code === 'Enter') {
-        console.log('here');
         onEnterDown(inputNode.value);
       }
     };
@@ -41,6 +39,7 @@ function Search({ value, onChange, onEnterDown }: ISearchProps) {
       <SearchIcon className="absolute left-[4px] top-[3px]" color="#ddd" size={24} />
 
       <input
+        data-testid="search-input"
         placeholder="Поиск"
         className="border-solid border-[#ddd] rounded-[6px] border-2 py-[5px] pr-[15px] pl-[30px]"
         ref={inputRef}

@@ -45,29 +45,35 @@ function UpdateUserForm({ onSubmit, disabled, user }: IUpdateUserFormProps) {
       disabled,
   };
 
-  console.log(name === formState.defaultValues?.name);
-
   return (
     <form
+      data-testid="edit-user-form"
       onSubmit={handleSubmit(callbacks.onSubmit)}
       className="max-w-[540px] flex flex-col gap-y-[15px] mx-auto"
     >
       <div>
         <Label title="Имя пользователя:">
-          <Input {...register('name')} disabled={disabled} />
+          <Input {...register('name')} disabled={disabled} data-testid="update-input-username" />
           <span>{formState.errors?.name?.message}</span>
         </Label>
       </div>
 
       <div>
         <Label title="Описание:">
-          <Input {...register('descr')} disabled={disabled} textarea />
+          <Input
+            {...register('descr')}
+            disabled={disabled}
+            textarea
+            data-testid="update-textarea-username"
+          />
           <span>{formState.errors?.descr?.message}</span>
         </Label>
       </div>
 
       <div className="flex justify-end">
-        <Button disabled={options.isSubmitBtnDisabled}>Обновить</Button>
+        <Button data-testid="update-submit-button" disabled={options.isSubmitBtnDisabled}>
+          Обновить
+        </Button>
       </div>
     </form>
   );

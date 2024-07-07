@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { IPaginationResponse, ISearchByOptions } from '../types';
-import { BASE_API_URL } from '../config';
 
-const BASE_API_URL_USERS = `${BASE_API_URL}/users`;
+const BASE_API_URL_USERS = `/api/users`;
 
 const apiInstance = axios.create({
   baseURL: BASE_API_URL_USERS,
@@ -16,7 +15,6 @@ const httpUsersClient = {
         page: options.page,
       },
     });
-    console.log('searchBy:', response);
     return response.data;
   },
   fetchUserById: async (userId: IUser['id']) => {
@@ -25,7 +23,6 @@ const httpUsersClient = {
   },
   createUser: async (user: Omit<IUser, 'id'>) => {
     const response = await apiInstance.post<IUser>('', user);
-    console.log('createUser:', response);
     return response.data;
   },
   deleteUser: async (userId: IUser['id']) => {
