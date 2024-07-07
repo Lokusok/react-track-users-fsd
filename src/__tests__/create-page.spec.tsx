@@ -12,7 +12,7 @@ describe('<CreatePage />', () => {
     );
 
     const inputUsername = screen.getByTestId('create-input-username');
-    const textareaDescr = screen.getByTestId('create-textarea-username');
+    const textareaDescr = screen.getByTestId('create-textarea-descr');
     const submitBtn = screen.getByTestId('create-submit-button');
 
     await userEvent.type(inputUsername, 'John');
@@ -61,7 +61,7 @@ describe('<CreatePage />', () => {
     );
 
     // const inputUsername = screen.getByTestId('create-input-username');
-    const textareaDescr = screen.getByTestId('create-textarea-username');
+    const textareaDescr = screen.getByTestId('create-textarea-descr');
     const submitBtn = screen.getByTestId('create-submit-button');
 
     // await userEvent.type(inputUsername, '');

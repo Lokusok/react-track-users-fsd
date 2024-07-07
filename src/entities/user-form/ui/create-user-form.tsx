@@ -68,7 +68,7 @@ function CreateUserForm(
             {...register('descr')}
             disabled={disabled}
             textarea
-            data-testid="create-textarea-username"
+            data-testid="create-textarea-descr"
           />
           <span>{formState.errors?.descr?.message}</span>
         </Label>

@@ -2,6 +2,7 @@ import style from './style.module.css';
 
 import { memo, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
 
 import {
@@ -23,6 +24,8 @@ import { useAppDispatch } from '@/shared/lib/hooks';
 import { NoUsersNotifier } from '@/shared/ui/no-users-notifier';
 
 function MainPage() {
+  const { page } = useParams();
+
   const dispatch = useAppDispatch();
 
   const users = useSelector(selectUsers);
@@ -51,28 +54,30 @@ function MainPage() {
   };
 
   useEffect(() => {
+    const pageToSearch = page ?? currentPage;
+
     const asyncEffect = async () => {
       const thunkResult = await dispatch(
         fetchUsers({
-          page: currentPage,
+          page: +pageToSearch,
           searchQuery,
         }),
       ).unwrap();
 
-      dispatch(paginationActions.setMaxPage(thunkResult.maxPage));
-      dispatch(paginationActions.setPerPage(thunkResult.perPage));
-      dispatch(paginationActions.setCurrentPage(thunkResult.page));
+      dispatch(paginationActions.setMaxPage(+thunkResult.maxPage));
+      dispatch(paginationActions.setPerPage(+thunkResult.perPage));
+      dispatch(paginationActions.setCurrentPage(+thunkResult.page));
     };
 
     asyncEffect();
-  }, [dispatch, currentPage, searchQuery]);
+  }, [page, dispatch, searchQuery, currentPage]);
 
   return (
     <PageLayout header={renders.header()}>
       <Container>
         <SwitchTransition mode="out-in">
           <CSSTransition
-            key={currentPage}
+            key={[page, searchQuery].join(',')}
             classNames={{
               enter: style['grid-wrapper-enter'],
               enterActive: style['grid-wrapper-enter-active'],
@@ -82,7 +87,7 @@ function MainPage() {
             timeout={300}
           >
             <>
-              {!isUsersWaiting && users.length > 0 ? (
+              {!isUsersWaiting && users?.length > 0 ? (
                 <div className="flex flex-col gap-y-[30px] items-center">
                   <Grid>
                     {users.length > 0 &&
@@ -105,7 +110,7 @@ function MainPage() {
                 </>
               )}
 
-              {!isUsersWaiting && users.length === 0 && <NoUsersNotifier />}
+              {!isUsersWaiting && users?.length === 0 && <NoUsersNotifier />}
             </>
           </CSSTransition>
         </SwitchTransition>

@@ -53,7 +53,7 @@ function UserProfile({ mode, setMode, user }: IUserProfileProps) {
   const renders = {
     actionsView: () => (
       <>
-        <Button disabled={isDeleting} onClick={callbacks.deleteUser}>
+        <Button data-testid="go-delete-button" disabled={isDeleting} onClick={callbacks.deleteUser}>
           Удалить
         </Button>
         <Button data-testid="go-edit-button" disabled={isDeleting} onClick={callbacks.toggleMode}>

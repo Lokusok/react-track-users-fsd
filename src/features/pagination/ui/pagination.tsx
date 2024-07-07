@@ -20,6 +20,7 @@ function Pagination() {
     renderItem: (page: number) => {
       return (
         <PaginationItem
+          asLink
           active={currentPage == page}
           order={page}
           onClick={() => callbacks.onClickPaginationItem(page)}
