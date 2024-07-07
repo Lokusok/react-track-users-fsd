@@ -1,7 +1,7 @@
 import style from './style.module.css';
 
 import { memo, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { batch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { SwitchTransition, CSSTransition } from 'react-transition-group';
 
@@ -64,9 +64,11 @@ function MainPage() {
         }),
       ).unwrap();
 
-      dispatch(paginationActions.setMaxPage(+thunkResult.maxPage));
-      dispatch(paginationActions.setPerPage(+thunkResult.perPage));
-      dispatch(paginationActions.setCurrentPage(+thunkResult.page));
+      batch(() => {
+        dispatch(paginationActions.setMaxPage(+thunkResult.maxPage));
+        dispatch(paginationActions.setPerPage(+thunkResult.perPage));
+        dispatch(paginationActions.setCurrentPage(+thunkResult.page));
+      });
     };
 
     asyncEffect();
