@@ -1,18 +1,23 @@
 import { memo } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 interface IMyNavLinkProps {
   children: React.ReactNode;
   to: string;
+  pathChoices?: string[];
 }
 
-function MyNavLink({ children, to }: IMyNavLinkProps) {
+function MyNavLink({ children, to, pathChoices = [] }: IMyNavLinkProps) {
+  const location = useLocation();
+
   const defaultClassName =
     'text-[24px] no-underline text-[#fff] hover:underline hover:opacity-[0.9]';
   const activeClassName = 'text-[24px] underline text-[#fff] opacity-[0.5]';
 
   const classNameChoice = ({ isActive }: { isActive: boolean }) => {
-    return isActive ? activeClassName : defaultClassName;
+    const isCorrectActive =
+      isActive || pathChoices.some((path) => location.pathname.startsWith(path));
+    return isCorrectActive ? activeClassName : defaultClassName;
   };
 
   return (
